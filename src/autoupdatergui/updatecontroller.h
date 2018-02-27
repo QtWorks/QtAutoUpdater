@@ -1,7 +1,7 @@
-#ifndef UPDATECONTROLLER_H
-#define UPDATECONTROLLER_H
+#ifndef QTAUTOUPDATER_UPDATECONTROLLER_H
+#define QTAUTOUPDATER_UPDATECONTROLLER_H
 
-#include "QtAutoUpdaterGui/qautoupdatergui_global.h"
+#include "QtAutoUpdaterGui/qtautoupdatergui_global.h"
 
 #include <QtCore/qobject.h>
 #include <QtCore/qstringlist.h>
@@ -55,7 +55,6 @@ public:
 	explicit UpdateController(const QString &maintenanceToolPath, QObject *parent = nullptr);
 	//! Constructs a new controller with an explicitly set path and a parent. Will be application modal
 	explicit UpdateController(const QString &maintenanceToolPath, QWidget *parentWindow, QObject *parent = nullptr);
-	//! Destructor
 	~UpdateController();
 
 	//! Create a QAction to start this controller from
@@ -119,4 +118,4 @@ private:
 
 }
 
-#endif // UPDATECONTROLLER_H
+#endif // QTAUTOUPDATER_UPDATECONTROLLER_H

@@ -33,11 +33,11 @@
 **************************************************************************/
 
 #include "adminauthorization_p.h"
-#include "dialogmaster.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QCoreApplication>
 #include <QtWidgets/QInputDialog>
+#include <dialogmaster.h>
 
 #include <cstdlib>
 #include <sys/resource.h>
@@ -54,15 +54,19 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <QProcess>
+#include <QtCore/QProcess>
+#include <QtCore/QStandardPaths>
 #include <errno.h>
 
 using namespace QtAutoUpdater;
 
-#define KDESU_COMMAND QStringLiteral("/usr/bin/kdesu")
 #define SU_COMMAND "/usr/bin/sudo"
 
 static bool execAdminFallback(const QString &program, const QStringList &arguments);
+static QList<QPair<QString, QStringList>> suFontends = {
+	{QStringLiteral("kdesu"), {QStringLiteral("-c")}},
+	{QStringLiteral("gksu"), {}}
+};
 
 // has no guarantee to work
 bool AdminAuthorization::hasAdminRights()
@@ -72,20 +76,21 @@ bool AdminAuthorization::hasAdminRights()
 
 bool AdminAuthorization::executeAsAdmin(const QString &program, const QStringList &arguments)
 {
-	QString command;
-	QStringList args;
+	for(auto su : qAsConst(suFontends)) {
+		auto command = QStandardPaths::findExecutable(su.first);
+		if(!command.isEmpty()) {
+			auto args = su.second;
 
-	if(QFile::exists(KDESU_COMMAND)) {
-		command = KDESU_COMMAND;
-		args.append(QStringLiteral("-c"));
-	} else
-		return execAdminFallback(program, arguments);
+			QStringList tmpList(program);
+			tmpList.append(arguments);
+			args.append(QLatin1Char('\"') + tmpList.join(QStringLiteral("\" \"")) + QLatin1Char('\"'));
 
-	QStringList tmpList(program);
-	tmpList.append(arguments);
-	args.append(QLatin1Char('\"') + tmpList.join(QStringLiteral("\" \"")) + QLatin1Char('\"'));
+			return QProcess::startDetached(command, args);
+		}
+	}
 
-	return QProcess::startDetached(command, args);
+	return execAdminFallback(program, arguments);
+
 }
 
 static bool execAdminFallback(const QString &program, const QStringList &arguments)
@@ -152,7 +157,6 @@ static bool execAdminFallback(const QString &program, const QStringList &argumen
 		QByteArray data;
 		QByteArray errData;
 		int bytes = 0;
-		int errBytes = 0;
 		char buf[1024];
 		char errBuf[1024];
 		while (bytes >= 0) {
@@ -169,7 +173,7 @@ static bool execAdminFallback(const QString &program, const QStringList &argumen
 				else
 					bytes = 0;
 			}
-			errBytes = ::read(pipedData[0], errBuf, 1023);
+			int errBytes = ::read(pipedData[0], errBuf, 1023);
 			if (errBytes > 0)
 			{
 				errData.append(errBuf, errBytes);
@@ -261,7 +265,7 @@ static bool execAdminFallback(const QString &program, const QStringList &argumen
 		::unsetenv("LC_ALL");
 
 		::execv(SU_COMMAND, argp);
-		_exit(0);
+		_exit(EXIT_FAILURE);
 		return false;
 	}
 }

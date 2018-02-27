@@ -1,7 +1,7 @@
-#ifndef ADMINAUTHORISER_H
-#define ADMINAUTHORISER_H
+#ifndef QTAUTOUPDATER_ADMINAUTHORISER_H
+#define QTAUTOUPDATER_ADMINAUTHORISER_H
 
-#include "QtAutoUpdaterCore/qautoupdatercore_global.h"
+#include "QtAutoUpdaterCore/qtautoupdatercore_global.h"
 
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
@@ -13,7 +13,6 @@ namespace QtAutoUpdater
 class Q_AUTOUPDATERCORE_EXPORT AdminAuthoriser
 {
 public:
-	//! Virtual destructor
 	virtual inline ~AdminAuthoriser() {}
 	//! Tests whether this program already has elevated rights or not
 	virtual bool hasAdminRights() = 0;
@@ -23,4 +22,4 @@ public:
 
 }
 
-#endif // ADMINAUTHORISER_H
+#endif // QTAUTOUPDATER_ADMINAUTHORISER_H

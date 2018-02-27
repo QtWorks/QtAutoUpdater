@@ -2,11 +2,11 @@
 #include "updatecontroller_p.h"
 #include "adminauthorization_p.h"
 #include "updatebutton.h"
-#include "dialogmaster.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
+#include <dialogmaster.h>
 
 #include <QtAutoUpdaterCore/private/updater_p.h>
 
@@ -238,6 +238,8 @@ void UpdateController::checkUpdatesDone(bool hasUpdates, bool hasError)
 				if(d->runAdmin != oldRunAdmin)
 					emit runAsAdminChanged(d->runAdmin);
 
+				QT_WARNING_PUSH
+				QT_WARNING_DISABLE_GCC("-Wimplicit-fallthrough")
 				switch(res) {
 				case UpdateInfoDialog::InstallNow:
 					shouldShutDown = true;
@@ -250,6 +252,8 @@ void UpdateController::checkUpdatesDone(bool hasUpdates, bool hasError)
 				default:
 					Q_UNREACHABLE();
 				}
+				QT_WARNING_POP
+
 			} else {
 				d->mainUpdater->runUpdaterOnExit(d->runAdmin ? new AdminAuthorization() : nullptr);
 				if(d->displayLevel == ExitLevel) {

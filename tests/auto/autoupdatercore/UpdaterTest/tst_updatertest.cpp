@@ -3,6 +3,7 @@
 #include <QSignalSpy>
 #include <QVector>
 #include <functional>
+#include "installercontroller.h"
 using namespace QtAutoUpdater;
 
 #define TEST_DELAY 1000
@@ -22,6 +23,7 @@ class UpdaterTest : public QObject
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initTestCase();
 	void testUpdaterInitState();
 
 	void testUpdateCheck_data();
@@ -29,10 +31,24 @@ private Q_SLOTS:
 
 private:
 	Updater *updater;
+
+	InstallerController *controller;
 	QSignalSpy *checkSpy;
 	QSignalSpy *runningSpy;
 	QSignalSpy *updateInfoSpy;
 };
+
+void UpdaterTest::initTestCase()
+{
+#ifdef Q_OS_LINUX
+	if(!qgetenv("LD_PRELOAD").contains("Qt5AutoUpdaterCore"))
+		qWarning() << "No LD_PRELOAD set - this may fail on systems with multiple version of the modules";
+#endif
+	controller = new InstallerController(this);
+	controller->createRepository();
+	controller->createInstaller();
+	controller->installLocal();
+}
 
 void UpdaterTest::testUpdaterInitState()
 {
@@ -59,37 +75,34 @@ void UpdaterTest::testUpdaterInitState()
 
 void UpdaterTest::testUpdateCheck_data()
 {
-	QTest::addColumn<QString>("toolPath");
+	QTest::addColumn<QVersionNumber>("repoVersion");
 	QTest::addColumn<bool>("hasUpdates");
 	QTest::addColumn<QList<Updater::UpdateInfo>>("updates");
 
 	QList<Updater::UpdateInfo> updates;
-	updates += {"QtAutoUpdaterTestInstaller", QVersionNumber::fromString("1.0.1"), 46ull};
-	QString homePath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-	QString path = homePath + "/QtAutoUpdaterTestInstaller";
-	QTest::newRow("QtAutoUpdaterTestInstaller") << path + "/maintenancetool"
-												<< true
-												<< updates;
+
+	QTest::newRow("noUpdates") << QVersionNumber(1, 0, 0)
+							   << false
+							   << updates;
+
+	updates += {QStringLiteral("QtAutoUpdaterTestInstaller"), QVersionNumber::fromString(QStringLiteral("1.1.0")), 45ull};
+	QTest::newRow("simpleUpdate") << QVersionNumber(1, 1, 0)
+								  << true
+								  << updates;
 
 	updates.clear();
-
-#ifdef Q_OS_WIN
-	path = "C:/Qt";
-#else
-	path = homePath + "/Qt";
-#endif
-	QTest::newRow("Qt") << path + "/MaintenanceTool"
-						<< false
-						<< updates;
 }
 
 void UpdaterTest::testUpdateCheck()
 {
-	QFETCH(QString, toolPath);
+	QFETCH(QVersionNumber, repoVersion);
 	QFETCH(bool, hasUpdates);
 	QFETCH(QList<Updater::UpdateInfo>, updates);
 
-	updater = new Updater(toolPath, this);
+	controller->setVersion(repoVersion);
+	controller->createRepository();
+
+	updater = new Updater(controller->maintenanceToolPath() + QStringLiteral("/maintenancetool"), this);
 	QVERIFY(updater);
 	checkSpy = new QSignalSpy(updater, &Updater::checkUpdatesDone);
 	QVERIFY(checkSpy->isValid());
@@ -108,8 +121,8 @@ void UpdaterTest::testUpdateCheck()
 	QVERIFY(updater->isRunning());
 	QVERIFY(updateInfoSpy->takeFirst()[0].value<QList<Updater::UpdateInfo>>().isEmpty());
 
-	//wait max 2 min for the process to finish
-	QVERIFY(checkSpy->wait(120000));
+	//wait max 5 min for the process to finish
+	QVERIFY(checkSpy->wait(300000));
 
 	//show error log before continuing checking
 	QByteArray log = updater->errorLog();

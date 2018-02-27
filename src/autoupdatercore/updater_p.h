@@ -1,7 +1,7 @@
-#ifndef UPDATER_P_H
-#define UPDATER_P_H
+#ifndef QTAUTOUPDATER_UPDATER_P_H
+#define QTAUTOUPDATER_UPDATER_P_H
 
-#include "qautoupdatercore_global.h"
+#include "qtautoupdatercore_global.h"
 #include "updater.h"
 #include "simplescheduler_p.h"
 
@@ -70,4 +70,4 @@ public Q_SLOTS:
 
 Q_AUTOUPDATERCORE_EXPORT Q_DECLARE_LOGGING_CATEGORY(logQtAutoUpdater)
 
-#endif // UPDATER_P_H
+#endif // QTAUTOUPDATER_UPDATER_P_H

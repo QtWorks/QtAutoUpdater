@@ -1,7 +1,7 @@
-#ifndef UPDATEBUTTON_H
-#define UPDATEBUTTON_H
+#ifndef QTAUTOUPDATER_UPDATEBUTTON_H
+#define QTAUTOUPDATER_UPDATEBUTTON_H
 
-#include "QtAutoUpdaterGui/qautoupdatergui_global.h"
+#include "QtAutoUpdaterGui/qtautoupdatergui_global.h"
 #include "QtAutoUpdaterGui/updatecontroller.h"
 
 #include <QtCore/qscopedpointer.h>
@@ -29,7 +29,6 @@ class Q_AUTOUPDATERGUI_EXPORT UpdateButton : public QWidget
 public:
 	//! Creates a new update button to place in your GUI
 	explicit UpdateButton(QWidget *parent = nullptr, UpdateController *controller = nullptr);
-	//! Destructor
 	~UpdateButton();
 
 	//! @readAcFn{UpdateButton::animationFile}
@@ -74,4 +73,4 @@ private:
 
 }
 
-#endif // UPDATEBUTTON_H
+#endif // QTAUTOUPDATER_UPDATEBUTTON_H

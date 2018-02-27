@@ -3,5 +3,4 @@
 	"QtAutoUpdaterGui" => "$basedir/src/autoupdatergui",
 );
 
-%moduleheaders = (
-);
+$publicclassregexp = "QtAutoUpdater::.+";

@@ -11,17 +11,15 @@ win32 {
 	LIBS += -lutil
 }
 
-include(../3rdparty/QtUtils/DialogMaster/dialogmaster.pri)
-
 HEADERS += \
-	qautoupdatergui_global.h \
 	updatebutton_p.h \
 	updatebutton.h \
 	updatecontroller_p.h \
 	updatecontroller.h \
 	adminauthorization_p.h \
 	progressdialog_p.h \
-    updateinfodialog_p.h
+	updateinfodialog_p.h \
+	qtautoupdatergui_global.h
 
 SOURCES += \
 	progressdialog.cpp \
@@ -41,7 +39,12 @@ FORMS += \
 RESOURCES += \
 	autoupdatergui_resource.qrc
 
-include(./translations/translations.pri)
+TRANSLATIONS += translations/qtautoupdatergui_de.ts \
+	translations/qtautoupdatergui_es.ts \
+	translations/qtautoupdatergui_fr.ts \
+	translations/qtautoupdatergui_template.ts
+
+DISTFILES += $$TRANSLATIONS
 
 load(qt_module)
 
@@ -52,3 +55,16 @@ win32 {
 } else:mac {
 	QMAKE_TARGET_BUNDLE_PREFIX = "de.skycoder42."
 }
+
+qpmx_ts_target.path = $$[QT_INSTALL_TRANSLATIONS]
+qpmx_ts_target.depends += lrelease
+INSTALLS += qpmx_ts_target
+
+!ReleaseBuild:!DebugBuild:!system(qpmx -d $$shell_quote($$_PRO_FILE_PWD_) --qmake-run init $$QPMX_EXTRA_OPTIONS $$shell_quote($$QMAKE_QMAKE) $$shell_quote($$OUT_PWD)): error(qpmx initialization failed. Check the compilation log for details.)
+else: include($$OUT_PWD/qpmx_generated.pri)
+
+#replace template qm by ts
+qpmx_ts_target.files -= $$OUT_PWD/$$QPMX_WORKINGDIR/qtautoupdatergui_template.qm
+qpmx_ts_target.files += translations/qtautoupdatergui_template.ts
+
+mingw: LIBS_PRIVATE += -lQt5Widgets -lQt5Gui -lQt5Core

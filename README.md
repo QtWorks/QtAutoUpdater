@@ -4,6 +4,10 @@ The Qt auto updater library is a library to automatically check for updates and 
  - A library with the basic updater (without any GUI)
  - A second library that requires the first one and adds basic GUI features
 
+[![Travis Build Status](https://travis-ci.org/Skycoder42/QtAutoUpdater.svg?branch=master)](https://travis-ci.org/Skycoder42/QtAutoUpdater)
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/5iw2byrvnsdfytxv/branch/master?svg=true)](https://ci.appveyor.com/project/Skycoder42/qtautoupdater/branch/master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a5b2e3cc66c644869515d2f3a5c3ff49)](https://www.codacy.com/app/Skycoder42/QtAutoUpdater)
+
 ## Features
 ### Core Library
  - Automatic Check for updates using the maintenancetool
@@ -51,18 +55,17 @@ There are multiple ways to install the Qt module, sorted by preference:
 	7. You can install either all of my modules, or select the one you need: `Qt Auto Updater`
 	8. Continue the setup and thats it! you can now use the module for all of your installed Kits for that Qt Version
 2. Download the compiled modules from the release page. **Note:** You will have to add the correct ones yourself and may need to adjust some paths to fit your installation!
-3. Build it yourself! **Note:** This requires perl to be installed. If you don't have/need cmake, you can ignore the related warnings. To automatically build and install to your Qt installation, run:
+3. Build it yourself! **Note:** This requires perl, [qpmx](https://github.com/Skycoder42/qpmx) and [qpm](https://github.com/Cutehacks/qpm) to be installed. If you don't have/need cmake, you can ignore the related warnings. To automatically build and install to your Qt installation, run:
 	- `qmake`
 	- `make qmake_all`
 	- `make`
-	- `make lrelease` (optional step to generate the .qm files)
 	- `make install`
 
 ## Usage
 The autoupdater is provided as a Qt module. Thus, all you have to do is add the module, and then, in your project, add `QT += autoupdatercore` or `QT += autoupdatergui` to your .pro file - depending on what you need!
 
 ### Getting started
-The usage of this library is not that complicated. However, to make this work you will have to use the Qt Installer Framework to create and installer/updater. If you already now how to to that, just check out the examples below. If not, here are some links that
+The usage of this library is not that complicated. However, to make this work you will have to use the Qt Installer Framework to create an installer/updater. If you already know how to to that, just check out the examples below. If not, here are some links that
 will explain how to create an online-installer using the framework. Once you have figured out how to do that, it's only a small step
 to the updater library:
  - [QtIFW - Tutorial: Creating an Installer](https://doc.qt.io/qtinstallerframework/ifw-tutorial.html): Check this to learn how to create an installer in general. Don't be afraid, it's a very short tutorial
@@ -105,7 +108,7 @@ int main(int argc, char *argv[])
 ```
 
 #### UpdateController
-This example will show you the full dialog flow of the controller. Both libraries are required for this example. Since there is no mainwindow in this example, you will only see the controller dialogs. Please not that you can control how much of that dialogset will be shown to the user. This example is *reduced*! for a full example with all parts of the controller, check the `Tests/WidgetsTest` application.
+This example will show you the full dialog flow of the controller. Both libraries are required for this example. Since there is no mainwindow in this example, you will only see the controller dialogs. Please note that you can control how much of that dialogset will be shown to the user. This example is *reduced*! for a full example with all parts of the controller, check the `examples/autoupdatergui/WidgetsUpdater` application.
 
 ```cpp
 #include <QApplication>
@@ -138,7 +141,7 @@ The documentation is available on [github pages](https://skycoder42.github.io/Qt
 together with the module for both the custom repository and the package on the release page. Please note that doxygen docs do not perfectly integrate with QtCreator/QtAssistant.
 
 ## Translations
-The core library does not need any translation, because it won't show anything to the user. The Gui library however does. The project is prepared for translation. But since I speak only english and german, those are the only languages I can provide translations for. However, you can easily create the translations yourself. The file `src/autoupdatergui/translations/QtAutoUpdaterController_template.ts` is a ready-made TS file. Just rename it (e.g. to `QtAutoUpdaterController_jp.ts`) and open it with the QtLinguist to create the translations.
+The core library does not need any translation, because it won't show anything to the user. The Gui library however does. The project is prepared for translation. Only german and spanish translations are provided. However, you can easily create the translations yourself. The file `src/autoupdatergui/translations/QtAutoUpdaterController_template.ts` is a ready-made TS file. Just rename it (e.g. to `QtAutoUpdaterController_jp.ts`) and open it with the QtLinguist to create the translations.
 
 ## Icon sources/Links
 Most icons have been found using [IconArchive](http://www.iconarchive.com/)

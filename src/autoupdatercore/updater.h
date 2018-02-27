@@ -1,7 +1,7 @@
-#ifndef UPDATER_H
-#define UPDATER_H
+#ifndef QTAUTOUPDATER_UPDATER_H
+#define QTAUTOUPDATER_UPDATER_H
 
-#include "QtAutoUpdaterCore/qautoupdatercore_global.h"
+#include "QtAutoUpdaterCore/qtautoupdatercore_global.h"
 #include "QtAutoUpdaterCore/adminauthoriser.h"
 
 #include <QtCore/qobject.h>
@@ -46,6 +46,10 @@ public:
 		//! Constructor that takes name, version and size
 		UpdateInfo(QString name, QVersionNumber version, quint64 size);
 	};
+
+	static const QStringList NormalUpdateArguments;
+	static const QStringList PassiveUpdateArguments;
+	static const QStringList HiddenUpdateArguments;
 
 	//! Default constructor
 	explicit Updater(QObject *parent = nullptr);
@@ -110,4 +114,4 @@ Q_DECLARE_METATYPE(QtAutoUpdater::Updater::UpdateInfo)
 
 QDebug Q_AUTOUPDATERCORE_EXPORT &operator<<(QDebug &debug, const QtAutoUpdater::Updater::UpdateInfo &info);
 
-#endif // UPDATER_H
+#endif // QTAUTOUPDATER_UPDATER_H

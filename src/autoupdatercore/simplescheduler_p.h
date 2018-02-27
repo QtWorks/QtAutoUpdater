@@ -1,7 +1,7 @@
-#ifndef SIMPLESCHEDULER_P_H
-#define SIMPLESCHEDULER_P_H
+#ifndef QTAUTOUPDATER_SIMPLESCHEDULER_P_H
+#define QTAUTOUPDATER_SIMPLESCHEDULER_P_H
 
-#include "qautoupdatercore_global.h"
+#include "qtautoupdatercore_global.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
@@ -37,4 +37,4 @@ private:
 
 }
 
-#endif // SIMPLESCHEDULER_P_H
+#endif // QTAUTOUPDATER_SIMPLESCHEDULER_P_H

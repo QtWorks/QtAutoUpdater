@@ -1,7 +1,7 @@
-#ifndef UPDATEBUTTON_P_H
-#define UPDATEBUTTON_P_H
+#ifndef QTAUTOUPDATER_UPDATEBUTTON_P_H
+#define QTAUTOUPDATER_UPDATEBUTTON_P_H
 
-#include "qautoupdatergui_global.h"
+#include "qtautoupdatergui_global.h"
 #include "updatebutton.h"
 
 #include <QtCore/QPointer>
@@ -35,4 +35,4 @@ public:
 
 }
 
-#endif // UPDATEBUTTON_P_H
+#endif // QTAUTOUPDATER_UPDATEBUTTON_P_H
